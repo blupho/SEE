@@ -1,3 +1,56 @@
+import streamlit as st
+############ ETTING UP THE PAGE LAYOUT AND TITLE ############
+
+# `st.set_page_config` is used to display the default layout width, the title of the app, and the emoticon in the browser tab.
+
+st.set_page_config(
+    layout="centered", page_title="Zero-Shot Text Classifier", page_icon="❄️"
+)
+
+############ CREATE THE LOGO AND HEADING ############
+
+# We create a set of columns to display the logo and the heading next to each other.
+
+
+c1, c2 = st.columns([0.32, 2])
+
+# The snowflake logo will be displayed in the first column, on the left.
+
+with c1:
+
+    st.image(
+        "images/logo.png",
+        width=85,
+    )
+
+
+# The heading will be on the right.
+
+with c2:
+
+    st.caption("")
+    st.title("Zero-Shot Text Classifier")
+
+
+# We need to set up session state via st.session_state so that app interactions don't reset the app.
+
+if not "valid_inputs_received" in st.session_state:
+    st.session_state["valid_inputs_received"] = False
+
+
+############ SIDEBAR CONTENT ############
+
+st.sidebar.write("")
+
+# For elements to be displayed in the sidebar, we need to add the sidebar element in the widget.
+
+# We create a text input field for users to enter their API key.
+
+API_KEY = st.sidebar.text_input(
+    "Enter your HuggingFace API key",
+    help="Once you created you HuggingFace account, you can get your free API token in your settings page: https://huggingface.co/settings/tokens",
+    type="password",
+)
 # RMP Guidance Equation D-1
 #Qr = Evaporation rate (pounds per minute)
 # U = Wind speed (meters per second)
