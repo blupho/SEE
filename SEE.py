@@ -44,13 +44,14 @@ st.sidebar.write("")
 
 # For elements to be displayed in the sidebar, we need to add the sidebar element in the widget.
 
-# We create a text input field for users to enter their API key.
+# We create a text input field for users to enter spill information
 
-API_KEY = st.sidebar.text_input(
-    "Enter your HuggingFace API key",
-    help="Once you created you HuggingFace account, you can get your free API token in your settings page: https://huggingface.co/settings/tokens",
-    type="password",
-)
+S = st.sidebar.text_input("Wind Speed in MPH")
+P = st.sidebar.text_input("Vapor Pressure in PSI")
+F = st.sidebar.text_input("Temperature in Fahrenheit")
+MW = st.sidebar.text_input("Molecular Weight")
+A = st.sidebar.text_input("Spill Surface Area in square feet")
+
 # RMP Guidance Equation D-1
 #Qr = Evaporation rate (pounds per minute)
 # U = Wind speed (meters per second)
@@ -76,6 +77,6 @@ def mmhg_psi(P):
 def FtK(F):
    T = (F-32)*5/9+273.15
    return T
-S,P,F,MW,A=int(input("Wind Speed in mph: ")),int(input("Vapor Pressure in psi: ")),int(input("Temperature in F: ")),int(input("Molecular Weight: ")),int(input("Spill Surface Area in square feet: "))
-print (RMP_equation(mps_mph(S),MW,A,mmhg_psi(P),FtK(F)))
+#S,P,F,MW,A=int(input("Wind Speed in mph: ")),int(input("Vapor Pressure in psi: ")),int(input("Temperature in F: ")),int(input("Molecular Weight: ")),int(input("Spill Surface Area in square feet: "))
+#print (RMP_equation(mps_mph(S),MW,A,mmhg_psi(P),FtK(F)))
 
