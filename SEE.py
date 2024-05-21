@@ -10,32 +10,28 @@ st.set_page_config(
 ############ CREATE THE LOGO AND HEADING ############
 
 # We create a set of columns to display the logo and the heading next to each other.
-
-
-c1, c2 = st.columns([0.32, 2])
-
+# c1, c2 = st.columns([0.32, 2])
 # The snowflake logo will be displayed in the first column, on the left.
 
-with c1:
+# with c1:
 
-    st.image(
-        "images/logo.png",
-        width=85,
-    )
+    # st.image(
+#         "images/logo.png",
+#         width=85,
+#     )
 
 
-# The heading will be on the right.
+# # The heading will be on the right.
 
-with c2:
-
-    st.caption("")
-    st.title("Zero-Shot Text Classifier")
+# with c2:
+#     st.caption("")
+#     st.title("Zero-Shot Text Classifier")
 
 
 # We need to set up session state via st.session_state so that app interactions don't reset the app.
 
-if not "valid_inputs_received" in st.session_state:
-    st.session_state["valid_inputs_received"] = False
+# if not "valid_inputs_received" in st.session_state:
+#     st.session_state["valid_inputs_received"] = False
 
 
 ############ SIDEBAR CONTENT ############
@@ -78,5 +74,4 @@ def FtK(F):
    T = (F-32)*5/9+273.15
    return T
 #S,P,F,MW,A=int(input("Wind Speed in mph: ")),int(input("Vapor Pressure in psi: ")),int(input("Temperature in F: ")),int(input("Molecular Weight: ")),int(input("Spill Surface Area in square feet: "))
-#print (RMP_equation(mps_mph(S),MW,A,mmhg_psi(P),FtK(F)))
-
+st.write(RMP_equation(mps_mph(int(S)),int(MW),int(A),mmhg_psi(int(P)),FtK(int(F))))
