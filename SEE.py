@@ -74,4 +74,5 @@ def FtK(F):
    T = (F-32)*5/9+273.15
    return T
 #S,P,F,MW,A=int(input("Wind Speed in mph: ")),int(input("Vapor Pressure in psi: ")),int(input("Temperature in F: ")),int(input("Molecular Weight: ")),int(input("Spill Surface Area in square feet: "))
-st.write("RMP Guidance Equation D-1 Method:"+RMP_equation(mps_mph(int(S)),int(MW),int(A),mmhg_psi(int(P)),FtK(int(F)))+"lb per minunte")
+Qr = RMP_equation(mps_mph(int(S)),int(MW),int(A),mmhg_psi(int(P)),FtK(int(F)))
+st.write("RMP Guidance Equation D-1 Method:",Qr,"lb per minunte")
