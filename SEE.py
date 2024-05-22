@@ -42,11 +42,11 @@ st.sidebar.write("Spill Information")
 
 # We create a text input field for users to enter spill information
 
-S = st.sidebar.number_input("Wind Speed in MPH",step = 1)
-P = st.sidebar.number_input("Vapor Pressure in PSI", step = 1)
-F = st.sidebar.number_input("Temperature in Fahrenheit",step = 1)
-MW = st.sidebar.number_input("Molecular Weight",step = 1)
-A = st.sidebar.number_input("Spill Surface Area in square feet",step = 1)
+S = st.sidebar.number_input("Wind Speed in MPH",step = 0.1)
+P = st.sidebar.number_input("Vapor Pressure in PSI")
+F = st.sidebar.number_input("Temperature in Fahrenheit")
+MW = st.sidebar.number_input("Molecular Weight")
+A = st.sidebar.number_input("Spill Surface Area in square feet")
 st.sidebar.button("Reset", type="secondary")
 # RMP Guidance Equation D-1
 #Qr = Evaporation rate (pounds per minute)
