@@ -45,7 +45,7 @@ st.sidebar.write("Spill Information")
 S = st.sidebar.number_input("Wind Speed in MPH",step = 0.1)
 P = st.sidebar.number_input("Vapor Pressure in PSI")
 F = st.sidebar.number_input("Temperature in Fahrenheit")
-MW = st.sidebar.number_input("Molecular Weight")
+MW = st.sidebar.number_input("Molecular Weight",value=68 )
 A = st.sidebar.number_input("Spill Surface Area in square feet")
 st.sidebar.button("Reset", type="secondary")
 # RMP Guidance Equation D-1
