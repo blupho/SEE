@@ -62,18 +62,27 @@ def RMP_equation(U,MW,A,VP,T):
 # RMP_equation(10,66,100,5,275)
 # mph to m/s conversion
 # S = windspeed in mph
-def mps_mph(S):
+def mph_mps(S):
    U = S/2.237
    return U
 # psi to mmHg conversion, P = vapor pressure in psi
-def mmhg_psi(P):
+def psi_mmhg(P):
    VP = 51.751*P
    return VP
 # F to K converstion, 
 def FtK(F):
    T = (F-32)*5/9+273.15
    return T
+# EPA Emission Inventory Improvement Program Chapter 16 Eq. 3-24, Evaporation from an Open Top Vessel or a Spill
+def EIIPCh16(Mi,Ki,A,Pisat,Tl):
+   En = (Mi*Ki*A*Pisat)/(998.9*Tl)
+   return En
+def Ki(Mi):
+   Ki = 0.83*((18.02/Mi)**(1/3))*118.1102
+   return Ki
 #S,P,F,MW,A=int(input("Wind Speed in mph: ")),int(input("Vapor Pressure in psi: ")),int(input("Temperature in F: ")),int(input("Molecular Weight: ")),int(input("Spill Surface Area in square feet: "))
-Qr = RMP_equation(mps_mph(S),MW,A,mmhg_psi(P),FtK(F))
+Qr = RMP_equation(mph_mps(S),MW,A,pis_mmhg(P),FtK(F))
+En = EIIPCh16(MW,Ki(MW),A,psi_mmhg(P),FtK(F))
 if st.sidebar.button("Calculate",type="primary"):
     st.write("RMP Guidance Equation D-1 Method:",Qr,"lb per minunte")
+    st.write("EPA EIIP Chapter 16 Eq. 3-24 Method:",En,"lb per hour")
