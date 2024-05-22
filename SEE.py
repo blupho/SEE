@@ -81,8 +81,8 @@ def Ki(Mi):
    Ki = 0.83*((18.02/Mi)**(1/3))*118.1102
    return Ki
 #S,P,F,MW,A=int(input("Wind Speed in mph: ")),int(input("Vapor Pressure in psi: ")),int(input("Temperature in F: ")),int(input("Molecular Weight: ")),int(input("Spill Surface Area in square feet: "))
-Qr = RMP_equation(mph_mps(S),MW,A,pis_mmhg(P),FtK(F))
+Qr = RMP_equation(mph_mps(S),MW,A,psi_mmhg(P),FtK(F))
 En = EIIPCh16(MW,Ki(MW),A,psi_mmhg(P),FtK(F))
 if st.sidebar.button("Calculate",type="primary"):
-    #st.write("RMP Guidance Equation D-1 Method:",Qr,"lb per minunte")
+    st.write("RMP Guidance Equation D-1 Method:",Qr,"lb per minunte")
     st.write("EPA EIIP Chapter 16 Eq. 3-24 Method:",En,"lb per hour")
