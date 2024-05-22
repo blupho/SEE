@@ -47,7 +47,7 @@ P = st.sidebar.number_input("Vapor Pressure in PSI")
 F = st.sidebar.number_input("Temperature in Fahrenheit")
 MW = st.sidebar.number_input("Molecular Weight")
 A = st.sidebar.number_input("Spill Surface Area in square feet")
-st.sidebar.button("Reset", type="primary")
+st.sidebar.button("Reset", type="secondary")
 # RMP Guidance Equation D-1
 #Qr = Evaporation rate (pounds per minute)
 # U = Wind speed (meters per second)
@@ -75,5 +75,5 @@ def FtK(F):
    return T
 #S,P,F,MW,A=int(input("Wind Speed in mph: ")),int(input("Vapor Pressure in psi: ")),int(input("Temperature in F: ")),int(input("Molecular Weight: ")),int(input("Spill Surface Area in square feet: "))
 Qr = RMP_equation(mps_mph(S),MW,A,mmhg_psi(P),FtK(F))
-if st.sidebar.button("Calculate"):
+if st.sidebar.button("Calculate",type="primary"):
     st.write("RMP Guidance Equation D-1 Method:",Qr,"lb per minunte")
