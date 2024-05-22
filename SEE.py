@@ -4,7 +4,7 @@ import streamlit as st
 # `st.set_page_config` is used to display the default layout width, the title of the app, and the emoticon in the browser tab.
 
 st.set_page_config(
-    layout="centered", page_title="Spill Emission Estimator", page_icon="❄️"
+    layout="centered", page_title="Spill Emission Estimator", page_icon="☁️"
 )
 
 ############ CREATE THE LOGO AND HEADING ############
@@ -36,7 +36,7 @@ st.set_page_config(
 
 ############ SIDEBAR CONTENT ############
 
-st.sidebar.write("")
+st.sidebar.write("Spill Information")
 
 # For elements to be displayed in the sidebar, we need to add the sidebar element in the widget.
 
