@@ -47,7 +47,7 @@ P = st.sidebar.number_input("Vapor Pressure in PSI", step = 1)
 F = st.sidebar.number_input("Temperature in Fahrenheit",step = 1)
 MW = st.sidebar.number_input("Molecular Weight",step = 1)
 A = st.sidebar.number_input("Spill Surface Area in square feet",step = 1)
-st.sidebar.button("Reset", type="secondary",step = 1)
+st.sidebar.button("Reset", type="secondary")
 # RMP Guidance Equation D-1
 #Qr = Evaporation rate (pounds per minute)
 # U = Wind speed (meters per second)
