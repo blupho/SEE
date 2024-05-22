@@ -42,11 +42,11 @@ st.sidebar.write("")
 
 # We create a text input field for users to enter spill information
 
-S = st.sidebar.text_input("Wind Speed in MPH")
-P = st.sidebar.text_input("Vapor Pressure in PSI")
-F = st.sidebar.text_input("Temperature in Fahrenheit")
-MW = st.sidebar.text_input("Molecular Weight")
-A = st.sidebar.text_input("Spill Surface Area in square feet")
+S = st.sidebar.number_input("Wind Speed in MPH")
+P = st.sidebar.number_input("Vapor Pressure in PSI")
+F = st.sidebar.number_input("Temperature in Fahrenheit")
+MW = st.sidebar.number_input("Molecular Weight")
+A = st.sidebar.number_input("Spill Surface Area in square feet")
 
 # RMP Guidance Equation D-1
 #Qr = Evaporation rate (pounds per minute)
@@ -74,5 +74,5 @@ def FtK(F):
    T = (F-32)*5/9+273.15
    return T
 #S,P,F,MW,A=int(input("Wind Speed in mph: ")),int(input("Vapor Pressure in psi: ")),int(input("Temperature in F: ")),int(input("Molecular Weight: ")),int(input("Spill Surface Area in square feet: "))
-Qr = RMP_equation(mps_mph(int(S)),int(MW),int(A),mmhg_psi(int(P)),FtK(int(F)))
+Qr = RMP_equation(mps_mph(S),MW,A,mmhg_psi(P),FtK(F))
 st.write("RMP Guidance Equation D-1 Method:",Qr,"lb per minunte")
