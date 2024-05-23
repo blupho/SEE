@@ -80,4 +80,7 @@ Method 1: [US EPA Risk Management Program Guidance for Offsite Consequence Analy
 *This method is sensitive to wind speed and assumes a conservative mass transfer coefficient.*
 
 Method 2: [US EPA Emission Inventory Improvement Program, Volume II, Chapter 16, Methods for Estimating Air Emissions from Chemical Manufacturing Facilities, Equation 3-24](https://www.epa.gov/sites/default/files/2015-08/documents/ii16_aug2007final.pdf)    
-*Wind speed is not a factor in this method. It can also be used for open top tank emission calculations.*''')
+*Wind speed is not a factor in this method. It can also be used for open top tank emission calculations.*
+
+Method 3: [Merv Fingas: The Evaporation of Oil Spills: Development and Implementation of New Prediction Methodology, Table 7.2](https://www.researchgate.net/publication/272766273_The_Evaporation_of_Oil_Spills_Development_and_Implementation_of_New_Prediction_Methodology)
+*This method uses empirical evaporation equations developed for specifice oils by lab experiments, time and temperature are the only factors*''')
