@@ -77,7 +77,7 @@ if st.sidebar.button("Calculate",type="primary"):
     st.write("EPA EIIP Chapter 16 Eq. 3-24 Method:",En*T/60,"pounds")
 st.success('''***References:***  
 Method 1: [US EPA Risk Management Program Guidance for Offsite Consequence Analysis, Appendix D, Equation D-1](https://www.epa.gov/sites/default/files/2017-05/documents/oca-apds.pdf)   
-This method is sensitive to wind speed and a conservative mass transfer coefficient was used.
+This method is sensitive to wind speed and a conservative mass transfer coefficient was assumed.
 
 Method 2: [US EPA Emission Inventory Improvement Program, Volume II, Chapter 16, Methods for Estimating Air Emissions from Chemical Manufacturing Facilities, Equation 3-24](https://www.epa.gov/sites/default/files/2015-08/documents/ii16_aug2007final.pdf)    
 Wind speed is not a factor in the method. It can also be used for open top tank emission calculations.''')
