@@ -14,7 +14,6 @@ c1, c2 = st.columns([0.32, 2])
 # The snowflake logo will be displayed in the first column, on the left.
 
 with c1:
-
     st.image(
        "https://response.restoration.noaa.gov/sites/default/files/skimming_dwh_2010_noaa_520.jpg",
          width=180,
@@ -24,7 +23,7 @@ with c1:
 # # The heading will be on the right.
 
 with c2:
-   st.caption("")     
+    st.caption("")
     st.title("Spill Emission Estimatpr")
 
 
