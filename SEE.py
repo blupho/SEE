@@ -73,5 +73,5 @@ def Ki(Mi):
 Qr = RMP_equation(mph_mps(S),MW,A,psi_mmhg(P),FtK(F))
 En = EIIPCh16(MW,Ki(MW),A,psi_mmhg(P),FtK(F))
 if st.sidebar.button("Calculate",type="primary"):
-    st.write("RMP Guidance Equation D-1 Method:",Qr*T,"lb per minunte")
-    st.write("EPA EIIP Chapter 16 Eq. 3-24 Method:",En*T/60,"lb per hour")
+    st.write("RMP Guidance Equation D-1 Method:",Qr*T,"pounds")
+    st.write("EPA EIIP Chapter 16 Eq. 3-24 Method:",En*T/60,"pounds")
