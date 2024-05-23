@@ -11,7 +11,7 @@ st.set_page_config(
 
 # We create a set of columns to display the logo and the heading next to each other.
  c1, c2 = st.columns([0.32, 2])
- The snowflake logo will be displayed in the first column, on the left.
+# The snowflake logo will be displayed in the first column, on the left.
 
 with c1:
 
@@ -30,8 +30,8 @@ with c2:
 
 # We need to set up session state via st.session_state so that app interactions don't reset the app.
 
-# if not "valid_inputs_received" in st.session_state:
-#     st.session_state["valid_inputs_received"] = False
+if not "valid_inputs_received" in st.session_state:
+     st.session_state["valid_inputs_received"] = False
 
 
 ############ SIDEBAR CONTENT ############
