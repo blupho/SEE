@@ -75,7 +75,7 @@ En = EIIPCh16(MW,Ki(MW),A,psi_mmhg(P),FtK(F))
 if st.sidebar.button("Calculate",type="primary"):
     st.write("RMP Guidance Equation D-1 Method:",Qr*T,"pounds")
     st.write("EPA EIIP Chapter 16 Eq. 3-24 Method:",En*T/60,"pounds")
-st.success('''***References:***  
+st.success('''**References:**  
 Method 1: [US EPA Risk Management Program Guidance for Offsite Consequence Analysis, Appendix D, Equation D-1](https://www.epa.gov/sites/default/files/2017-05/documents/oca-apds.pdf)   
 *This method is sensitive to wind speed and assumes a conservative mass transfer coefficient.*
 
