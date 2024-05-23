@@ -1,5 +1,4 @@
 import streamlit as st
-############ ETTING UP THE PAGE LAYOUT AND TITLE ############
 
 # `st.set_page_config` is used to display the default layout width, the title of the app, and the emoticon in the browser tab.
 
@@ -7,11 +6,9 @@ st.set_page_config(
     layout="centered", page_title="Spill Emission Estimator", page_icon=":factory:"
 )
 
-############ CREATE THE LOGO AND HEADING ############
-
-# We create a set of columns to display the logo and the heading next to each other.
+#  create 2 columns to display the logo and the heading next to each other.
 c1, c2 = st.columns([2, 6])
-# The snowflake logo will be displayed in the first column, on the left.
+# spill boat will be displayed in the first column, on the left.
 
 with c1:
     st.image(
@@ -19,15 +16,13 @@ with c1:
          width=180,
      )
 
-
 # # The heading will be on the right.
 
 with c2:
     st.caption("")
     st.title("Spill Emission Estimator")
 
-
-# We need to set up session state via st.session_state so that app interactions don't reset the app.
+# set up session state via st.session_state so that app interactions don't reset the app.
 
 if not "valid_inputs_received" in st.session_state:
      st.session_state["valid_inputs_received"] = False
@@ -36,17 +31,12 @@ if not "valid_inputs_received" in st.session_state:
 ############ SIDEBAR CONTENT ############
 
 st.sidebar.write("Spill Information")
-
-# For elements to be displayed in the sidebar, we need to add the sidebar element in the widget.
-
-# We create a text input field for users to enter spill information
-
 S = st.sidebar.number_input("Wind Speed in MPH",step = 0.1)
-P = st.sidebar.number_input("Vapor Pressure in PSI")
-F = st.sidebar.number_input("Temperature in Fahrenheit")
-MW = st.sidebar.number_input("Molecular Weight",value=68 )
+P = st.sidebar.number_input("Material True Vapor Pressure in PSI")
+F = st.sidebar.number_input("Material Temperature in Fahrenheit")
+MW = st.sidebar.number_input("Vapor Molecular Weight",value=68 )
 A = st.sidebar.number_input("Spill Surface Area in square feet")
-st.sidebar.button("Reset", type="secondary")
+T = st.sidebar.number_input("Total Spill Duration in minutes")
 # RMP Guidance Equation D-1
 #Qr = Evaporation rate (pounds per minute)
 # U = Wind speed (meters per second)
@@ -83,5 +73,5 @@ def Ki(Mi):
 Qr = RMP_equation(mph_mps(S),MW,A,psi_mmhg(P),FtK(F))
 En = EIIPCh16(MW,Ki(MW),A,psi_mmhg(P),FtK(F))
 if st.sidebar.button("Calculate",type="primary"):
-    st.write("RMP Guidance Equation D-1 Method:",Qr,"lb per minunte")
-    st.write("EPA EIIP Chapter 16 Eq. 3-24 Method:",En,"lb per hour")
+    st.write("RMP Guidance Equation D-1 Method:",Qr*T,"lb per minunte")
+    st.write("EPA EIIP Chapter 16 Eq. 3-24 Method:",En*T/60,"lb per hour")
