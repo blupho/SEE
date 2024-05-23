@@ -34,7 +34,7 @@ st.sidebar.write("**Spill Information:**")
 S = st.sidebar.number_input("Wind Speed in MPH",step = 0.1)
 P = st.sidebar.number_input("Material True Vapor Pressure in PSI")
 F = st.sidebar.number_input("Material Temperature in Fahrenheit")
-MW = st.sidebar.number_input("Vapor Molecular Weight",value=68 )
+MW = st.sidebar.number_input("Vapor Molecular Weight")
 A = st.sidebar.number_input("Spill Surface Area in square feet")
 T = st.sidebar.number_input("Total Spill Duration in minutes")
 # RMP Guidance Equation D-1
@@ -70,9 +70,9 @@ def Ki(Mi):
    Ki = 0.83*((18.02/Mi)**(1/3))*118.1102
    return Ki
 #S,P,F,MW,A=int(input("Wind Speed in mph: ")),int(input("Vapor Pressure in psi: ")),int(input("Temperature in F: ")),int(input("Molecular Weight: ")),int(input("Spill Surface Area in square feet: "))
-Qr = RMP_equation(mph_mps(S),MW,A,psi_mmhg(P),FtK(F))
-En = EIIPCh16(MW,Ki(MW),A,psi_mmhg(P),FtK(F))
 if st.sidebar.button("Calculate",type="primary"):
+    Qr = RMP_equation(mph_mps(S),MW,A,psi_mmhg(P),FtK(F))
+    En = EIIPCh16(MW,Ki(MW),A,psi_mmhg(P),FtK(F))
     st.write("RMP Guidance Equation D-1 Method:",Qr*T,"pounds")
     st.write("EPA EIIP Chapter 16 Eq. 3-24 Method:",En*T/60,"pounds")
 st.success('''**References:**  
@@ -82,6 +82,6 @@ Method 1: [US EPA Risk Management Program Guidance for Offsite Consequence Analy
 Method 2: [US EPA Emission Inventory Improvement Program, Volume II, Chapter 16, Methods for Estimating Air Emissions from Chemical Manufacturing Facilities, Equation 3-24](https://www.epa.gov/sites/default/files/2015-08/documents/ii16_aug2007final.pdf)    
 *Wind speed is not a factor in this method. It can also be used for open top tank emission calculations.*
 
-Method 3: [Merv Fingas: The Evaporation of Oil Spills: Development and Implementation of New Prediction Methodology, Table 7.2](https://www.researchgate.net/publication/272766273_The_Evaporation_of_Oil_Spills_Development_and_Implementation_of_New_Prediction_Methodology)
+Method 3: [Merv Fingas: The Evaporation of Oil Spills: Development and Implementation of New Prediction Methodology, Table 7.2](https://www.researchgate.net/publication/272766273_The_Evaporation_of_Oil_Spills_Development_and_Implementation_of_New_Prediction_Methodology)  
 *This method uses empirical evaporation equations developed for specifice oils by lab experiments, time and temperature are the only factors*
 ''')
