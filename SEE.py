@@ -75,6 +75,6 @@ En = EIIPCh16(MW,Ki(MW),A,psi_mmhg(P),FtK(F))
 if st.sidebar.button("Calculate",type="primary"):
     st.write("RMP Guidance Equation D-1 Method:",Qr*T,"pounds")
     st.write("EPA EIIP Chapter 16 Eq. 3-24 Method:",En*T/60,"pounds")
-st.success('Method 1: [US EPA Risk Management Program Guidance for Offsite Consequence Analysis, Appendix D, Equation D-1](https://www.epa.gov/sites/default/files/2017-05/documents/oca-apds.pdf)
+st.success('''Method 1: [US EPA Risk Management Program Guidance for Offsite Consequence Analysis, Appendix D, Equation D-1](https://www.epa.gov/sites/default/files/2017-05/documents/oca-apds.pdf)
 
-Method 2: [US EPA Emission Inventory Improvement Program, Volume II, Chapter 16, Methods for Estimating Air Emissions from Chemical Manufacturing Facilities, Equation 3-24](https://www.epa.gov/sites/default/files/2015-08/documents/ii16_aug2007final.pdf)')
+Method 2: [US EPA Emission Inventory Improvement Program, Volume II, Chapter 16, Methods for Estimating Air Emissions from Chemical Manufacturing Facilities, Equation 3-24](https://www.epa.gov/sites/default/files/2015-08/documents/ii16_aug2007final.pdf)''')
