@@ -83,4 +83,5 @@ Method 2: [US EPA Emission Inventory Improvement Program, Volume II, Chapter 16,
 *Wind speed is not a factor in this method. It can also be used for open top tank emission calculations.*
 
 Method 3: [Merv Fingas: The Evaporation of Oil Spills: Development and Implementation of New Prediction Methodology, Table 7.2](https://www.researchgate.net/publication/272766273_The_Evaporation_of_Oil_Spills_Development_and_Implementation_of_New_Prediction_Methodology)
-*This method uses empirical evaporation equations developed for specifice oils by lab experiments, time and temperature are the only factors*''')
+*This method uses empirical evaporation equations developed for specifice oils by lab experiments, time and temperature are the only factors*
+''')
