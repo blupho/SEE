@@ -1,2 +1,2 @@
 All rights reserved.
-This app was developed by [Dayu Zhang](zhangd@gmail.com) in his personal time, using personal computer for satisfying his personal curiosity. He is not responsible for any violations, penalties, jail time, injuries, divorces or nuclear wars caused by usage of this app.
+I devloped this web app in my personal time, on my personal equipement for satisfying my personal curiosity. I'm not responsible for any violations, penalties, jail time, injuries, divorces or nuclear wars caused by using this app.
