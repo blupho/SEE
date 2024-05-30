@@ -9,7 +9,6 @@ st.set_page_config(
 #  create 2 columns to display the logo and the heading next to each other.
 c1, c2 = st.columns([0.3, 0.7])
 # spill boat will be displayed in the first column, on the left.
-
 with c1:
     st.image(
        "https://response.restoration.noaa.gov/sites/default/files/skimming_dwh_2010_noaa_520.jpg",
@@ -17,7 +16,6 @@ with c1:
      )
 
 # # The heading will be on the right.
-
 with c2:
     st.caption("")
     st.header("Spill Emission Estimator")
