@@ -5,6 +5,7 @@ import math
 st.set_page_config(
     layout="centered", page_title="Spill Emission Estimator", page_icon=":factory:"
 )
+
 #  create 2 columns to display the logo and the heading next to each other.
 c1, c2 = st.columns([0.3, 0.7])
 # spill boat will be displayed in the first column, on the left.
@@ -19,7 +20,7 @@ with c1:
 
 with c2:
     st.caption("")
-    st.title("Spill Emission Estimator")
+    st.header("Spill Emission Estimator")
 
 # set up session state via st.session_state so that app interactions don't reset the app.
 
@@ -31,14 +32,14 @@ if not "valid_inputs_received" in st.session_state:
 
 st.sidebar.markdown("**Enter Spill Information Below:**")
 select_event = st.sidebar.selectbox('Spilled Material',
-                                    ['Gasoline', 'WTI','Diesel Fuel'])
+                                    ['Gasoline', 'WTI','Diesel Fuel','Other'])
 S = st.sidebar.number_input("Wind Speed in MPH",step = 0.1)
 P1 = st.empty()
 F = st.sidebar.number_input("Material Temperature in Fahrenheit")
 P2 = st.empty()
 A = st.sidebar.number_input("Spill Surface Area in square feet")
 V = st.sidebar.number_input("Total Spill Volume in Gallons")
-T = st.sidebar.number_input("Total Spill Duration in minutes",value=1)
+T = st.sidebar.number_input("Total Spill Duration in minutes",value=5)
 # RMP Guidance Equation D-1
 #Qr = Evaporation rate (pounds per minute)
 # U = Wind speed (meters per second)
@@ -92,20 +93,43 @@ if select_event == 'WTI':
  #Default vapor pressure set to 9  
    with P1.container():
       P = st.sidebar.number_input("Material True Vapor Pressure in PSI",value=9)
- #RVP 7 Gasoline vapor MW according to AP-42 Chapter 7  
+ #Crude vapor MW according to AP-42 Chapter 7  
    with P2.container():
       MW = st.sidebar.number_input("Vapor Molecular Weight",value=50)
 # Method 3: El is the % of product evaporated after T minutes. crude density 7.21 lb/gal
    El = (3.08+(0.045*FtC(F)))*(math.log(T))*7.21/100
+
+
+#Empirical Diesel Equation
+if select_event == 'Diesel Fuel':
+ #Default vapor pressure set to 9  
+   with P1.container():
+      P = st.sidebar.number_input("Material True Vapor Pressure in PSI",step=0.001, value=0.006)
+ #diesel fuel vapor MW according to AP-42 Chapter 7  
+   with P2.container():
+      MW = st.sidebar.number_input("Vapor Molecular Weight",value=130)
+# Method 3: El is the % of product evaporated after T minutes. diesel density 7.1 lb/gal
+   El = (0.39+(0.013*FtC(F)))*(T**0.5)*7.1/100
+#Products without Empirical Equations
+if select_event == 'Other':
+ #Default vapor pressure set to 9  
+   with P1.container():
+      P = st.sidebar.number_input("Material True Vapor Pressure in PSI")
+ #diesel fuel vapor MW according to AP-42 Chapter 7  
+   with P2.container():
+      MW = st.sidebar.number_input("Vapor Molecular Weight")
+
 #S,P,F,MW,A=int(input("Wind Speed in mph: ")),int(input("Vapor Pressure in psi: ")),int(input("Temperature in F: ")),int(input("Molecular Weight: ")),int(input("Spill Surface Area in square feet: "))
 if st.sidebar.button("Calculate",type="primary"):
    Qr = RMP_equation(mph_mps(S),MW,A,psi_mmhg(P),FtK(F))
    En = EIIPCh16(MW,Ki(MW),A,psi_mmhg(P),FtK(F))
    st.write("RMP Guidance Equation D-1 Method:",Qr*T,"pounds")
    st.write("EPA EIIP Chapter 16 Eq. 3-24 Method:",En*T/60,"pounds")
-   st.write("Empirical Equation Method",V*El,"pounds")
+   if select_event != 'Other':
+      st.write("Empirical Equation Method",V*El,"pounds")
 
-st.success('''**References:**  
+with st.container(border=1):
+   st.markdown('''**References:**  
 Method 1: [US EPA Risk Management Program Guidance for Offsite Consequence Analysis, Appendix D, Equation D-1](https://www.epa.gov/sites/default/files/2017-05/documents/oca-apds.pdf)   
 *This method is sensitive to wind speed and assumes a conservative mass transfer coefficient.*
 
@@ -113,8 +137,8 @@ Method 2: [US EPA Emission Inventory Improvement Program, Volume II, Chapter 16,
 *Wind speed is not a factor in this method. It can also be used for open top tank emission calculations.*
 
 Method 3: [Merv Fingas: The Evaporation of Oil Spills: Development and Implementation of New Prediction Methodology, Table 7.2](https://www.researchgate.net/publication/272766273_The_Evaporation_of_Oil_Spills_Development_and_Implementation_of_New_Prediction_Methodology)  
-*This method uses empirical evaporation equations developed for specific oils by lab experiments, spill volume, time and temperature are the only factors*
-''')
+*This method uses empirical evaporation equations developed for specific oils by lab experiments, spill volume, time and temperature are the only factors*''')
+
 with st.container(border=1):
    st.markdown("**Spill volume to surface area conversion**")
    volume = st.number_input("Enter Spill Volume in Gallons")
