@@ -112,10 +112,10 @@ if select_event == 'Diesel Fuel':
 if select_event == 'Other':
  #Default vapor pressure set to 9  
    #with P1.container():
-   P = st.sidebar.number_input("Material True Vapor Pressure in PSI")
+   P = st.sidebar.number_input("Material True Vapor Pressure in PSI", value=1)
  #diesel fuel vapor MW according to AP-42 Chapter 7  
    #with P2.container():
-   MW = st.sidebar.number_input("Vapor Molecular Weight")
+   MW = st.sidebar.number_input("Vapor Molecular Weight",value=62)
 M1 = 0
 M2 = 0
 M3 = 0
