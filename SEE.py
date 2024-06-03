@@ -5,9 +5,11 @@ import math
 st.set_page_config(
     layout="centered", page_title="Spill Emission Estimator", page_icon=":factory:"
 )
+
 #  create 2 columns to display the logo and the heading next to each other.
 c1, c2 = st.columns([0.3, 0.7])
 # spill boat will be displayed in the first column, on the left.
+
 with c1:
     st.image(
        "https://response.restoration.noaa.gov/sites/default/files/skimming_dwh_2010_noaa_520.jpg",
@@ -15,6 +17,7 @@ with c1:
      )
 
 # # The heading will be on the right.
+
 with c2:
     st.caption("")
     st.header("Spill Emission Estimator")
@@ -29,11 +32,11 @@ if not "valid_inputs_received" in st.session_state:
 
 st.sidebar.markdown("**Enter Spill Information Below:**")
 select_event = st.sidebar.selectbox('Spilled Material',
-                                    ['Gasoline', 'WTI','Diesel Fuel','Other'])
+                                    ['Gasoline', 'WTI Crude','Diesel Fuel','Other'])
 S = st.sidebar.number_input("Wind Speed in MPH",step = 0.1)
-P1 = st.empty()
+# P1 = st.empty()
 F = st.sidebar.number_input("Material Temperature in Fahrenheit")
-P2 = st.empty()
+# P2 = st.empty()
 A = st.sidebar.number_input("Spill Surface Area in square feet")
 V = st.sidebar.number_input("Total Spill Volume in Gallons")
 T = st.sidebar.number_input("Total Spill Duration in minutes",value=5)
@@ -77,53 +80,60 @@ def Ki(Mi):
 #Empirical Gasoline Equation
 if select_event == 'Gasoline':
  #Default vapor pressure set to 7  
-   with P1.container():
-      P = st.sidebar.number_input("Material True Vapor Pressure in PSI",value=7)
+   #with P1.container():
+   P = st.sidebar.number_input("Material True Vapor Pressure in PSI",value=7)
  #RVP 7 Gasoline vapor MW according to AP-42 Chapter 7  
-   with P2.container():
-      MW = st.sidebar.number_input("Vapor Molecular Weight",value=68)
+   #with P2.container():
+   MW = st.sidebar.number_input("Vapor Molecular Weight",value=68)
 # Method 3: El is the % of product evaporated after T minutes. Gasoline density 6.07 lb/gal
    El = (13.2+(0.21*FtC(F)))*(math.log(T))*6.07/100
-
+   
 #Empirical WTI Crude Equation
-if select_event == 'WTI':
+if select_event == 'WTI Crude':
  #Default vapor pressure set to 9  
-   with P1.container():
-      P = st.sidebar.number_input("Material True Vapor Pressure in PSI",value=9)
+  # with P1.container():
+   P = st.sidebar.number_input("Material True Vapor Pressure in PSI",value=9)
  #Crude vapor MW according to AP-42 Chapter 7  
-   with P2.container():
-      MW = st.sidebar.number_input("Vapor Molecular Weight",value=50)
+   #with P2.container():
+   MW = st.sidebar.number_input("Vapor Molecular Weight",value=50)
 # Method 3: El is the % of product evaporated after T minutes. crude density 7.21 lb/gal
    El = (3.08+(0.045*FtC(F)))*(math.log(T))*7.21/100
-
-
+   
 #Empirical Diesel Equation
 if select_event == 'Diesel Fuel':
  #Default vapor pressure set to 9  
-   with P1.container():
-      P = st.sidebar.number_input("Material True Vapor Pressure in PSI",step=0.001, value=0.006)
+   #with P1.container():
+   P = st.sidebar.number_input("Material True Vapor Pressure in PSI",step=0.001, value=0.006)
  #diesel fuel vapor MW according to AP-42 Chapter 7  
-   with P2.container():
-      MW = st.sidebar.number_input("Vapor Molecular Weight",value=130)
+   #with P2.container():
+   MW = st.sidebar.number_input("Vapor Molecular Weight",value=130)
 # Method 3: El is the % of product evaporated after T minutes. diesel density 7.1 lb/gal
    El = (0.39+(0.013*FtC(F)))*(T**0.5)*7.1/100
+   
 #Products without Empirical Equations
 if select_event == 'Other':
  #Default vapor pressure set to 9  
-   with P1.container():
-      P = st.sidebar.number_input("Material True Vapor Pressure in PSI")
+   #with P1.container():
+   P = st.sidebar.number_input("Material True Vapor Pressure in PSI")
  #diesel fuel vapor MW according to AP-42 Chapter 7  
-   with P2.container():
-      MW = st.sidebar.number_input("Vapor Molecular Weight")
-
+   #with P2.container():
+   MW = st.sidebar.number_input("Vapor Molecular Weight")
+M1 = 0
+M2 = 0
+M3 = 0
 #S,P,F,MW,A=int(input("Wind Speed in mph: ")),int(input("Vapor Pressure in psi: ")),int(input("Temperature in F: ")),int(input("Molecular Weight: ")),int(input("Spill Surface Area in square feet: "))
 if st.sidebar.button("Calculate",type="primary"):
    Qr = RMP_equation(mph_mps(S),MW,A,psi_mmhg(P),FtK(F))
    En = EIIPCh16(MW,Ki(MW),A,psi_mmhg(P),FtK(F))
-   st.write("RMP Guidance Equation D-1 Method:",Qr*T,"pounds")
-   st.write("EPA EIIP Chapter 16 Eq. 3-24 Method:",En*T/60,"pounds")
+   M1 = Qr*T
+   M2 = En*T/60
    if select_event != 'Other':
-      st.write("Empirical Equation Method",V*El,"pounds")
+      M3 = V*El
+
+with st.container(border=1):
+   st.write("RMP Guidance Equation D-1 Method:",M1,"pounds")
+   st.write("EPA EIIP Chapter 16 Eq. 3-24 Method:",M2,"pounds")
+   st.write("Empirical Equation Method:",M3,"pounds")
 
 with st.container(border=1):
    st.markdown('''**References:**  
@@ -141,3 +151,9 @@ with st.container(border=1):
    volume = st.number_input("Enter Spill Volume in Gallons")
    depth = st.number_input("Enter Estimated Depth of The Spill in Inches", value=0.5)
    st.write("The Estimated Spill Area is",(volume*231/depth)/144,"Square Feet")
+
+with st.container(border=1):
+   st.markdown("**Oil Sheen Area to Volume Conversion**")
+   Sheen_Area = st.number_input("Enter Oil Sheen Area in Square Feet")
+   st.write("The Estimated Volume of the Spilled Product is",(Sheen_Area*(0.0002/12))*7.481,"Gallons")
+   st.markdown("*The thickness of oil sheen is assumed to be [0.0002 inch](https://response.restoration.noaa.gov/sites/default/files/OWJA_2016.pdf)*")
