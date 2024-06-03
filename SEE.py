@@ -14,7 +14,6 @@ with c1:
        "https://response.restoration.noaa.gov/sites/default/files/skimming_dwh_2010_noaa_520.jpg",
          width=200,
      )
-
 # # The heading will be on the right.
 
 with c2:
