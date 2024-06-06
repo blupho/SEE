@@ -5,6 +5,7 @@ import math
 st.set_page_config(
     layout="centered", page_title="Spill Emission Estimator", page_icon=":factory:"
 )
+
 #  create 2 columns to display the logo and the heading next to each other.
 c1, c2 = st.columns([0.3, 0.7])
 # spill boat will be displayed in the first column, on the left.
@@ -14,6 +15,7 @@ with c1:
        "https://response.restoration.noaa.gov/sites/default/files/skimming_dwh_2010_noaa_520.jpg",
          width=200,
      )
+
 # # The heading will be on the right.
 
 with c2:
@@ -79,10 +81,10 @@ def Ki(Mi):
 if select_event == 'Gasoline':
  #Default vapor pressure set to 7  
    #with P1.container():
-   P = st.sidebar.number_input("Material True Vapor Pressure in PSI",value=7)
+   P = st.sidebar.number_input("Material True Vapor Pressure in PSI",value=7.00,step = 0.01)
  #RVP 7 Gasoline vapor MW according to AP-42 Chapter 7  
    #with P2.container():
-   MW = st.sidebar.number_input("Vapor Molecular Weight",value=68)
+   MW = st.sidebar.number_input("Vapor Molecular Weight",value=68.00,step = 0.01)
 # Method 3: El is the % of product evaporated after T minutes. Gasoline density 6.07 lb/gal
    El = (13.2+(0.21*FtC(F)))*(math.log(T))*6.07/100
    
@@ -104,7 +106,7 @@ if select_event == 'Diesel Fuel':
    P = st.sidebar.number_input("Material True Vapor Pressure in PSI",step=0.001, value=0.006)
  #diesel fuel vapor MW according to AP-42 Chapter 7  
    #with P2.container():
-   MW = st.sidebar.number_input("Vapor Molecular Weight",value=130)
+   MW = st.sidebar.number_input("Vapor Molecular Weight",value=130.00,step = 0.01)
 # Method 3: El is the % of product evaporated after T minutes. diesel density 7.1 lb/gal
    El = (0.39+(0.013*FtC(F)))*(T**0.5)*7.1/100
    
@@ -112,10 +114,10 @@ if select_event == 'Diesel Fuel':
 if select_event == 'Other':
  #Default vapor pressure set to 9  
    #with P1.container():
-   P = st.sidebar.number_input("Material True Vapor Pressure in PSI", value=1)
+   P = st.sidebar.number_input("Material True Vapor Pressure in PSI",step = 0.01)
  #diesel fuel vapor MW according to AP-42 Chapter 7  
    #with P2.container():
-   MW = st.sidebar.number_input("Vapor Molecular Weight",value=62)
+   MW = st.sidebar.number_input("Vapor Molecular Weight",step = 0.01)
 M1 = 0
 M2 = 0
 M3 = 0
