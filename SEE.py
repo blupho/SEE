@@ -25,13 +25,14 @@ SHEET_LINK = (
 # Bundled copy of the profile sheet so the app keeps working offline / if the
 # sheet is temporarily unreachable. Keep in sync with the sheet.
 FALLBACK_CSV = (
-    "Product Name,Product Vapor Pressure (PSI),Product Vapor Molecular Weight (g/mol),"
-    "weight% of Vapor Components ->,Benzene,Ethylbenzene,Hexane,Isooctane,Toluene,Xylene,"
+    "Product Name,Product Vapor Pressure (PSI),Product Density (lb/gal),"
+    "Product Vapor Molecular Weight (g/mol),weight% of Vapor Components ->,"
+    "Benzene,Ethylbenzene,Hexane,Isooctane,Toluene,Xylene,"
     'Naphthalene,"1,2,4-Trimethylbenzene",Pentane,Butane,H2S\r\n'
-    'Gasoline,7,68,"From Table 3-1 from API Publication 1673 (May 1998), and Mr. James '
+    'Gasoline,7,5,68,"From Table 3-1 from API Publication 1673 (May 1998), and Mr. James '
     "Durham of the EPA\",0.6,0.5,1.56,0.1,1,1.4,0.218,0.015,3.8,2,0.5\r\n"
-    "WTI Crude,9,50,filler for testing,0.6,0.5,1.56,0.1,1,1.4,0.218,0.015,3.8,2,0.5\r\n"
-    "Diesel Fuel,0.01,130,filler for testing,0.6,0.5,1.56,0.1,1,1.4,0.218,0.015,3.8,2,0.5\r\n"
+    "WTI Crude,9,5,50,filler for testing,0.6,0.5,1.56,0.1,1,1.4,0.218,0.015,3.8,2,0.5\r\n"
+    "Diesel Fuel,0.01,5,130,filler for testing,0.6,0.5,1.56,0.1,1,1.4,0.218,0.015,3.8,2,0.5\r\n"
 )
 
 # Method 3 (Empirical) evaporation equations, from Merv Fingas "The Evaporation
@@ -59,20 +60,28 @@ def _to_float(v):
 def parse_products_csv(csv_text):
     """Parse the product-profile CSV from the Google Sheet export.
 
-    Expected layout (from the sheet template):
-        Product Name | Vapor Pressure (PSI) | Vapor MW (g/mol) | <note column> | <component weight % columns...>
+    Columns are located by header name (not position), so the sheet layout may
+    be reordered. Expected columns:
+        Product Name (first column) | Vapor Pressure (PSI) | Density (lb/gal,
+        optional) | Vapor MW (g/mol) | <note column> | <component weight % columns...>
 
-    Everything to the right of the note column ("weight% of Vapor Components ->")
-    is treated as a vapor component; the app can also carry extra components
-    the user adds as new columns.
+    The note column ("weight% of Vapor Components ->") marks where the vapor
+    component weight % columns start; everything to its right is a component.
     """
     df = pd.read_csv(StringIO(csv_text))
-    comp_start = 4
-    for i, col in enumerate(df.columns):
+    cols = list(df.columns)
+
+    vp_col = next((c for c in cols if "Vapor Pressure" in str(c)), None)
+    density_col = next((c for c in cols if "Density" in str(c)), None)
+    mw_col = next((c for c in cols if "Molecular Weight" in str(c)), None)
+    comp_start = None
+    for i, col in enumerate(cols):
         if "weight%" in str(col) or "Vapor Components" in str(col):
             comp_start = i + 1
             break
-    component_cols = list(df.columns[comp_start:])
+    component_cols = list(cols[comp_start:]) if comp_start is not None else []
+    # Never let the density column be mistaken for a vapor component.
+    component_cols = [c for c in component_cols if c != density_col]
 
     products = []
     for _, row in df.iterrows():
@@ -85,15 +94,16 @@ def parse_products_csv(csv_text):
             if w is not None:
                 components[str(col).strip()] = w
         note = ""
-        if len(df.columns) > comp_start - 1:
+        if comp_start is not None and comp_start - 1 < len(cols):
             note = str(row.iloc[comp_start - 1]).strip()
             if note.lower() == "nan":
                 note = ""
         products.append(
             {
                 "name": name,
-                "vp_psi": _to_float(row.iloc[1]),
-                "mw": _to_float(row.iloc[2]),
+                "vp_psi": _to_float(row[vp_col]) if vp_col is not None else None,
+                "density": _to_float(row[density_col]) if density_col is not None else None,
+                "mw": _to_float(row[mw_col]) if mw_col is not None else None,
                 "note": note,
                 "components": components,
             }
@@ -225,11 +235,17 @@ def main():
             value=selected["mw"] if selected["mw"] is not None else 0.0,
             step=0.01,
         )
+        density = selected["density"]
         if selected["note"]:
             st.sidebar.caption("Profile note: " + selected["note"])
     else:
         P = st.sidebar.number_input("Material True Vapor Pressure in PSI", step=0.01)
         MW = st.sidebar.number_input("Vapor Molecular Weight", step=0.01)
+        density = st.sidebar.number_input(
+            "Product Density in lb/gal (optional, 0 = no cap)",
+            value=0.0,
+            step=0.01,
+        )
         st.sidebar.caption("Manual product: no speciation profile; only Methods 1 & 2 apply.")
 
     S = st.sidebar.number_input("Wind Speed in MPH", step=0.1)
@@ -237,6 +253,11 @@ def main():
     A = st.sidebar.number_input("Spill Surface Area in square feet")
     V = st.sidebar.number_input("Total Spill Volume in Gallons")
     T = st.sidebar.number_input("Total Spill Duration in minutes", value=5)
+
+    # Density-based emission capping: a spill cannot evaporate more mass than it
+    # contains, so method totals are capped at total spilled weight = V * density.
+    cap_active = density is not None and density > 0 and V > 0
+    total_weight = V * density if cap_active else None
 
     with st.sidebar.expander("Product profiles (Google Sheet)"):
         st.caption("Source: " + source)
@@ -254,6 +275,7 @@ def main():
 
     # ---------------- Calculation ----------------
     M1 = M2 = M3 = None
+    capped_methods = []
     if st.sidebar.button("Calculate", type="primary"):
         if MW is None or MW <= 0:
             st.error("Vapor Molecular Weight must be greater than 0.")
@@ -267,14 +289,48 @@ def main():
             if selected is not None:
                 el = empirical_el(selected["name"], F, T)
                 M3 = V * el if el is not None else None
+
+            # Cap emissions at the total spilled weight: you cannot evaporate
+            # more mass than was spilled. Keep the uncapped totals for reporting.
+            if total_weight is not None:
+                M1_uncapped, M2_uncapped, M3_uncapped = M1, M2, M3
+                for label, m in (
+                    ("Method 1", M1),
+                    ("Method 2", M2),
+                    ("Method 3", M3),
+                ):
+                    if m is not None and m > total_weight:
+                        capped_methods.append(label)
+                M1 = min(M1, total_weight) if M1 is not None else None
+                M2 = min(M2, total_weight) if M2 is not None else None
+                M3 = min(M3, total_weight) if M3 is not None else None
+                st.session_state["uncapped_totals"] = {
+                    "M1": M1_uncapped,
+                    "M2": M2_uncapped,
+                    "M3": M3_uncapped,
+                }
+                st.session_state["capped_methods"] = list(capped_methods)
+                st.session_state["total_weight"] = total_weight
             st.session_state["valid_inputs_received"] = True
 
     st.divider()
     st.subheader("Estimated total emissions")
+    if cap_active and total_weight is not None:
+        st.caption(
+            f"Total spilled material weight: {V:,.1f} gal x {density} lb/gal = "
+            f"{total_weight:,.1f} lb (emissions capped at this)"
+        )
     mcols = st.columns(3)
     mcols[0].metric("Method 1 · RMP D-1", f"{M1:,.1f} lbs" if M1 is not None else "—")
     mcols[1].metric("Method 2 · EIIP Ch.16", f"{M2:,.1f} lbs" if M2 is not None else "—")
     mcols[2].metric("Method 3 · Empirical", f"{M3:,.1f} lbs" if M3 is not None else "N/A")
+    if capped_methods:
+        st.warning(
+            "Emissions from "
+            + ", ".join(capped_methods)
+            + f" exceeded the total spilled material weight ({total_weight:,.1f} lb) "
+            "and were capped at it."
+        )
 
     st.subheader("Speciated emissions (component breakdown)")
     if selected is None or not selected["components"]:
@@ -290,6 +346,11 @@ def main():
             "profile. Weight % usually does not sum to 100 — the remainder is "
             "uncharacterized hydrocarbons."
         )
+        if capped_methods:
+            st.caption(
+                f"Component breakdown uses method totals capped at the total spilled "
+                f"material weight ({total_weight:,.1f} lb)."
+            )
         tabs = st.tabs(["Method 1 · RMP", "Method 2 · EIIP", "Method 3 · Empirical"])
         for tab, total, label in zip(tabs, [M1, M2, M3], ["Method 1", "Method 2", "Method 3"]):
             with tab:

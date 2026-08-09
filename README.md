@@ -14,12 +14,16 @@ Product profiles (vapor pressure, vapor molecular weight, vapor-component weight
 are read from a public Google Sheet:
 <https://docs.google.com/spreadsheets/d/1duewVkxON4m83aXbcMZcwRRygz9AtkYRPNBDRT5_F_g/edit>
 
-- **Add a product**: add a row to the sheet (name, vapor pressure in PSI, vapor MW,
-  note, then one column per vapor component with its weight %). No code changes
-  needed — it shows up in the app within 10 minutes, or click
+- **Add a product**: add a row to the sheet (name, vapor pressure in PSI, density
+  in lb/gal, vapor MW, note, then one column per vapor component with its weight %).
+  No code changes needed — it shows up in the app within 10 minutes, or click
   **"Reload profiles now"** in the sidebar.
 - **Add a component**: add a column to the right of the note column
   (`weight% of Vapor Components ->`).
+- **Emission cap**: emissions cannot exceed the mass spilled — each method total
+  is capped at total spilled weight = spill volume × product density (lb/gal).
+  If a method is capped, the app warns and the speciation tables use the capped
+  totals. ("Other (manual entry)" has an optional density input; 0 = no cap.)
 - **Speciation**: the app shows a component breakdown for every method —
   pounds of each component = method total × component weight % / 100. The
   remainder (weight % not summing to 100) is reported as "Other / uncharacterized".
