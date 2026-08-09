@@ -255,7 +255,9 @@ def main():
     # ---------------- Calculation ----------------
     M1 = M2 = M3 = None
     if st.sidebar.button("Calculate", type="primary"):
-        if T is None or T <= 0:
+        if MW is None or MW <= 0:
+            st.error("Vapor Molecular Weight must be greater than 0.")
+        elif T is None or T <= 0:
             st.error("Spill duration must be greater than 0 (equations use ln(T) / sqrt(T)).")
         else:
             Qr = RMP_equation(mph_mps(S), MW, A, psi_mmhg(P), FtK(F))
@@ -298,7 +300,7 @@ def main():
                     st.dataframe(
                         df.round({"Weight %": 4, "Pounds (lb)": 2}),
                         hide_index=True,
-                        use_container_width=True,
+                        width="stretch",
                     )
 
     # ---------------- References ----------------
